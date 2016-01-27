@@ -1,18 +1,17 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
-	"github.com/codegangsta/cli"
 	"io"
 	"net/http"
 	"os"
 )
 
-func installCommand(c *cli.Context) {
+func installCommand(c CommandLine) error {
 	arg := c.Args().First()
 	if arg == "" {
-		fmt.Println("please specify plugin to install")
-		return
+		return errors.New("please specify plugin to install")
 	}
 
 	plugin, err := getPlugin(arg)
@@ -32,9 +31,7 @@ func installCommand(c *cli.Context) {
 
 	//unzip and feast upon this great plugin!
 
-	if err != nil {
-		fmt.Printf("%v", err)
-	}
+	return err
 }
 
 func downloadFile(filepath string, url string) (err error) {
