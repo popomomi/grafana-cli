@@ -3,7 +3,7 @@
 *.a
 *.so
 panel-plugin-piechart.tar.gz
-
+grafana-cli
 # Folders
 _obj
 _test
