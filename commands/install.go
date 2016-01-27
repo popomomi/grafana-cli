@@ -25,8 +25,12 @@ func installCommand(c *cli.Context) {
 	fmt.Printf("from url: %v\n", plugin.Url)
 	fmt.Printf("on commit: %v\n", plugin.Commit)
 
-	//err = downloadFile(plugin.Id+".tar.gz", plugin.Url)
-	err = downloadFile(plugin.Id+".tar.gz", "https://github.com/grafana/grafana-cli/raw/master/test-data/app-plugin-example.tar.gz")
+	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
+	localfileName := plugin.Id + ".zip"
+
+	err = downloadFile(localfileName, downloadUrl)
+
+	//unzip and feast upon this great plugin!
 
 	if err != nil {
 		fmt.Printf("%v", err)
