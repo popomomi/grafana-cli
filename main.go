@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
-	commands "github.com/grafana/grafana-cli/commands"
+	"github.com/grafana/grafana-cli/commands"
+	"github.com/grafana/grafana-cli/log"
 	"os"
 )
 
@@ -12,6 +13,7 @@ func getGFPath() string {
 }
 
 func main() {
+	SetupLogging()
 
 	app := cli.NewApp()
 	app.Name = "Grafana cli"
@@ -34,7 +36,17 @@ func main() {
 		},
 	}
 
-	app.Run(os.Args)
+	if err := app.Run(os.Args); err != nil {
+		log.Errorf("%v", err)
+	}
+}
+
+func SetupLogging() {
+	for _, f := range os.Args {
+		if f == "-D" || f == "--debug" || f == "-debug" {
+			log.SetDebug(true)
+		}
+	}
 }
 
 func cmdNotFound(c *cli.Context, command string) {

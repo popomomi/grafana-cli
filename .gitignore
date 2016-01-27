@@ -2,6 +2,7 @@
 *.o
 *.a
 *.so
+panel-plugin-piechart.zip
 panel-plugin-piechart.tar.gz
 grafana-cli
 # Folders
