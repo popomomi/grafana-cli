@@ -2,6 +2,7 @@
 *.o
 *.a
 *.so
+panel-plugin-piechart.tar.gz
 
 # Folders
 _obj

@@ -9,7 +9,13 @@ import (
 )
 
 func installCommand(c *cli.Context) {
-	plugin, err := getPlugin("panel-plugin-piechart")
+	arg := c.Args().First()
+	if arg == "" {
+		fmt.Println("please specify plugin to install")
+		return
+	}
+
+	plugin, err := getPlugin(arg)
 
 	if err != nil {
 		fmt.Println("cannot find your plugin")
