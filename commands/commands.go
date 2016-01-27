@@ -10,6 +10,10 @@ var Commands = []cli.Command{
 		Usage:  "installs stuff",
 		Action: installCommand,
 	}, {
+		Name:   "list",
+		Usage:  "list available plugins",
+		Action: listCommand,
+	}, {
 		Name:  "upgrade",
 		Usage: "upgrades stuff",
 		Action: func(c *cli.Context) {
