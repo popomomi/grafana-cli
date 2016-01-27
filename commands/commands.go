@@ -6,11 +6,9 @@ import (
 
 var Commands = []cli.Command{
 	{
-		Name:  "install",
-		Usage: "installs stuff",
-		Action: func(c *cli.Context) {
-			println("installllah")
-		},
+		Name:   "install",
+		Usage:  "installs stuff",
+		Action: installCommand,
 	}, {
 		Name:  "upgrade",
 		Usage: "upgrades stuff",
