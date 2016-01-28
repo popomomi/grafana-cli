@@ -1,9 +1,13 @@
 package commands
 
 import (
+	"archive/zip"
+	"bytes"
 	"errors"
 	"fmt"
+	"github.com/grafana/grafana-cli/log"
 	"io"
+	"io/ioutil"
 	"net/http"
 	"os"
 )
@@ -29,31 +33,51 @@ func installCommand(c CommandLine) error {
 
 	err = downloadFile(localfileName, downloadUrl)
 
-	//unzip and feast upon this great plugin!
-
 	return err
 }
 
 func downloadFile(filepath string, url string) (err error) {
-
-	// Create the file
 	out, err := os.Create(filepath)
 	if err != nil {
 		return err
 	}
 	defer out.Close()
 
-	// Get the data
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
 
-	// Writer the body to file
-	_, err = io.Copy(out, resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err
+		log.Errorf("%v", err)
+	}
+
+	r, err := zip.NewReader(bytes.NewReader(body), resp.ContentLength)
+	if err != nil {
+		log.Errorf("%v", err)
+	}
+	for _, zf := range r.File {
+		fmt.Println(zf.Name)
+
+		path := "tmp/" + zf.Name
+		if zf.FileInfo().IsDir() {
+			os.Mkdir(path, 0777)
+		} else {
+			dst, err := os.Create(path)
+			if err != nil {
+				log.Errorf("%v", err)
+			}
+			defer dst.Close()
+			src, err := zf.Open()
+			if err != nil {
+				log.Errorf("%v", err)
+			}
+			defer src.Close()
+
+			io.Copy(dst, src)
+		}
 	}
 
 	return nil
