@@ -3,6 +3,7 @@ package commands
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
+	"github.com/grafana/grafana-cli/log"
 )
 
 type CommandLine interface {

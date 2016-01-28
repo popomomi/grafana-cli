@@ -14,13 +14,15 @@ import (
 func installCommand(c CommandLine) error {
 	arg := c.Args().First()
 	if arg == "" {
+		c.ShowHelp()
 		return errors.New("please specify plugin to install")
 	}
 
 	plugin, err := getPlugin(arg)
 
 	if err != nil {
-		log.Error("cannot find your plugin\n")
+		c.ShowHelp()
+		return err
 	}
 
 	log.Infof("installing %v\n", plugin.Id)

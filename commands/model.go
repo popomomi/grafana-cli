@@ -41,5 +41,5 @@ func getPlugin(id string) (Plugin, error) {
 		}
 	}
 
-	return Plugin{}, errors.New("could not find ")
+	return Plugin{}, errors.New("could not find plugin named \"" + id + "\"")
 }
