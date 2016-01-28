@@ -4,7 +4,6 @@ import (
 	"archive/zip"
 	"bytes"
 	"errors"
-	"fmt"
 	"github.com/grafana/grafana-cli/log"
 	"io"
 	"io/ioutil"
@@ -21,28 +20,21 @@ func installCommand(c CommandLine) error {
 	plugin, err := getPlugin(arg)
 
 	if err != nil {
-		fmt.Println("cannot find your plugin")
+		log.Error("cannot find your plugin\n")
 	}
 
-	fmt.Printf("installing %v\n", plugin.Id)
-	fmt.Printf("from url: %v\n", plugin.Url)
-	fmt.Printf("on commit: %v\n", plugin.Commit)
+	log.Infof("installing %v\n", plugin.Id)
+	log.Infof("from url: %v\n", plugin.Url)
+	log.Infof("on commit: %v\n", plugin.Commit)
 
 	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
-	localfileName := plugin.Id + ".zip"
 
-	err = downloadFile(localfileName, downloadUrl)
+	err = downloadFile("tmp/", downloadUrl)
 
 	return err
 }
 
 func downloadFile(filepath string, url string) (err error) {
-	out, err := os.Create(filepath)
-	if err != nil {
-		return err
-	}
-	defer out.Close()
-
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -59,12 +51,11 @@ func downloadFile(filepath string, url string) (err error) {
 		log.Errorf("%v", err)
 	}
 	for _, zf := range r.File {
-		fmt.Println(zf.Name)
-
-		path := "tmp/" + zf.Name
+		path := filepath + zf.Name
 		if zf.FileInfo().IsDir() {
 			os.Mkdir(path, 0777)
 		} else {
+			log.Infof("Extracting: %s\n", zf.Name)
 			dst, err := os.Create(path)
 			if err != nil {
 				log.Errorf("%v", err)
