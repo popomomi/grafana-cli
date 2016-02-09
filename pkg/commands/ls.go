@@ -12,13 +12,13 @@ import (
 func lsCommand(c CommandLine) error {
 	pluginDir := c.GlobalString("path")
 	log.Debug("plugindir: " + pluginDir + "\n")
-	k, err := os.Stat(pluginDir)
+	pluginDirInfo, err := os.Stat(pluginDir)
 
 	if err != nil {
 		return errors.New("missing path flag")
 	}
 
-	if !k.IsDir() {
+	if pluginDirInfo.IsDir() == false {
 		return errors.New("plugin path is not a directory")
 	}
 
