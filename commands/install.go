@@ -30,6 +30,8 @@ func installCommand(c CommandLine) error {
 	log.Infof("on commit: %v\n", plugin.Commit)
 
 	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
+	//c.FlagNames()["grafana-path"]
+	log.Errorf("\n------ %v ------\n", c.String("path"))
 
 	err = downloadFile("tmp/", downloadUrl)
 

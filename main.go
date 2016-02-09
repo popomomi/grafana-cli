@@ -9,7 +9,7 @@ import (
 )
 
 func getGFPath() string {
-	return "/var/lib/grafana" //based on your OS!
+	return "tmp/" //based on your OS!
 }
 
 func main() {
@@ -20,21 +20,20 @@ func main() {
 	app.Author = "raintank"
 	app.Email = "https://github.com/grafana/grafana"
 	app.Version = "0.0.1"
-	app.Commands = commands.Commands
-	app.CommandNotFound = cmdNotFound
-
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
 			Name:  "debug, d",
 			Usage: "enable Verbose printing",
 		},
 		cli.StringFlag{
-			Name:   "grafana path, p",
-			Usage:  "path to the grafana installation",
-			EnvVar: "GF_PATH",
-			Value:  getGFPath(),
+			Name:  "path, p",
+			Usage: "path to the grafana installation",
+			Value: "tmp/",
 		},
 	}
+
+	app.Commands = commands.Commands
+	app.CommandNotFound = cmdNotFound
 
 	if err := app.Run(os.Args); err != nil {
 		log.Errorf("%v", err)

@@ -40,6 +40,7 @@ func runCommand(command func(commandLine CommandLine) error) func(context *cli.C
 	return func(context *cli.Context) {
 
 		//validate tokens etc
+		log.Infof("----- %s ------\n\n", context.StringSlice("path"))
 
 		if err := command(&contextCommandLine{context}); err != nil {
 			fmt.Printf("%v\n", err)
