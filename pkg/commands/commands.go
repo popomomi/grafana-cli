@@ -53,9 +53,9 @@ var Commands = []cli.Command{
 		Usage:  "installs stuff",
 		Action: runCommand(installCommand),
 	}, {
-		Name:   "list",
-		Usage:  "list available plugins",
-		Action: runCommand(listCommand),
+		Name:   "remote",
+		Usage:  "list remote available plugins",
+		Action: runCommand(listremoteCommand),
 	}, {
 		Name:   "upgrade",
 		Usage:  "upgrades stuff",

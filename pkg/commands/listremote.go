@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func listCommand(c CommandLine) error {
+func listremoteCommand(c CommandLine) error {
 	plugin, err := listAllPlugins()
 
 	if err != nil {
