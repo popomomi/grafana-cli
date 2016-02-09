@@ -34,6 +34,10 @@ func main() {
 			Usage: "path to the grafana installation",
 			Value: getGrafanaPluginPath(),
 		},
+		cli.BoolFlag{
+			Name:  "debug, d",
+			Usage: "enable debug logging",
+		},
 	}
 
 	app.Commands = commands.Commands

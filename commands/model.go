@@ -5,6 +5,12 @@ import (
 	"github.com/franela/goreq"
 )
 
+type InstalledPlugin struct {
+	Id      string `json:"id"`
+	Name    string `json:"name"`
+	Version string `json:"version"`
+}
+
 type Plugin struct {
 	Id       string `json:"id"`
 	Category string `json:"category"`

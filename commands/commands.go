@@ -61,6 +61,10 @@ var Commands = []cli.Command{
 		Usage:  "upgrades stuff",
 		Action: runCommand(upgradeCommand),
 	}, {
+		Name:   "ls",
+		Usage:  "list all installed plugins",
+		Action: runCommand(lsCommand),
+	}, {
 		Name:  "remove",
 		Usage: "removes stuff",
 		Action: func(c *cli.Context) {
