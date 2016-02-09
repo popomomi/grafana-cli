@@ -11,6 +11,10 @@ import (
 
 func lsCommand(c CommandLine) error {
 	pluginDir := c.GlobalString("path")
+	if pluginDir == "" {
+		return errors.New("missing path flag")
+	}
+
 	log.Debug("plugindir: " + pluginDir + "\n")
 	pluginDirInfo, err := os.Stat(pluginDir)
 
