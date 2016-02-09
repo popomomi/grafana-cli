@@ -6,10 +6,18 @@ import (
 	"github.com/grafana/grafana-cli/commands"
 	"github.com/grafana/grafana-cli/log"
 	"os"
+	"runtime"
 )
 
-func getGFPath() string {
-	return "tmp/" //based on your OS!
+func getGrafanaPluginPath() string {
+	os := runtime.GOOS
+	if os == "linux" {
+		return "/var/lib/grafana/plugins"
+	} else if os == "windows" {
+		return "C:\\opt\\grafana\\plugins" // :&
+	}
+
+	return "tmp_do/" //based on your OS!
 }
 
 func main() {
@@ -21,14 +29,10 @@ func main() {
 	app.Email = "https://github.com/grafana/grafana"
 	app.Version = "0.0.1"
 	app.Flags = []cli.Flag{
-		cli.BoolFlag{
-			Name:  "debug, d",
-			Usage: "enable Verbose printing",
-		},
 		cli.StringFlag{
-			Name:  "path, p",
+			Name:  "path",
 			Usage: "path to the grafana installation",
-			Value: "tmp/",
+			Value: getGrafanaPluginPath(),
 		},
 	}
 

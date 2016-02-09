@@ -14,14 +14,12 @@ import (
 func installCommand(c CommandLine) error {
 	arg := c.Args().First()
 	if arg == "" {
-		c.ShowHelp()
 		return errors.New("please specify plugin to install")
 	}
 
 	plugin, err := getPlugin(arg)
 
 	if err != nil {
-		c.ShowHelp()
 		return err
 	}
 
@@ -30,10 +28,9 @@ func installCommand(c CommandLine) error {
 	log.Infof("on commit: %v\n", plugin.Commit)
 
 	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
-	//c.FlagNames()["grafana-path"]
-	log.Errorf("\n------ %v ------\n", c.String("path"))
 
-	err = downloadFile("tmp/", downloadUrl)
+	pluginDir := c.GlobalString("path")
+	err = downloadFile(pluginDir, downloadUrl)
 
 	return err
 }
@@ -59,7 +56,6 @@ func downloadFile(filepath string, url string) (err error) {
 		if zf.FileInfo().IsDir() {
 			os.Mkdir(path, 0777)
 		} else {
-			log.Infof("Extracting: %s\n", zf.Name)
 			dst, err := os.Create(path)
 			if err != nil {
 				log.Errorf("%v", err)

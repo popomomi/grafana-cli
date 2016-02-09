@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"fmt"
 	"github.com/codegangsta/cli"
 	"github.com/grafana/grafana-cli/log"
 )
@@ -39,11 +38,11 @@ func (c *contextCommandLine) Application() *cli.App {
 func runCommand(command func(commandLine CommandLine) error) func(context *cli.Context) {
 	return func(context *cli.Context) {
 
-		//validate tokens etc
-		log.Infof("----- %s ------\n\n", context.StringSlice("path"))
+		cmd := &contextCommandLine{context}
+		if err := command(cmd); err != nil {
+			log.Errorf("%v\n\n", err)
 
-		if err := command(&contextCommandLine{context}); err != nil {
-			fmt.Printf("%v\n", err)
+			cmd.ShowHelp()
 		}
 	}
 }
@@ -58,22 +57,14 @@ var Commands = []cli.Command{
 		Usage:  "list available plugins",
 		Action: runCommand(listCommand),
 	}, {
-		Name:  "upgrade",
-		Usage: "upgrades stuff",
-		Action: func(c *cli.Context) {
-			println("up up och iväg!")
-		},
+		Name:   "upgrade",
+		Usage:  "upgrades stuff",
+		Action: runCommand(upgradeCommand),
 	}, {
 		Name:  "remove",
 		Usage: "removes stuff",
 		Action: func(c *cli.Context) {
 			println("nice and tidy!")
-		},
-	}, {
-		Name:  "upgrade",
-		Usage: "upgrades stuff",
-		Action: func(c *cli.Context) {
-			println("up up och iväg!")
 		},
 	},
 }
