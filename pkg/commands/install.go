@@ -4,7 +4,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"errors"
-	"github.com/grafana/grafana-cli/log"
+	"github.com/grafana/grafana-cli/pkg/log"
 	"io"
 	"io/ioutil"
 	"net/http"

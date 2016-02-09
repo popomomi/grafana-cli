@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/codegangsta/cli"
-	"github.com/grafana/grafana-cli/commands"
-	"github.com/grafana/grafana-cli/log"
+	"github.com/grafana/grafana-cli/pkg/commands"
+	"github.com/grafana/grafana-cli/pkg/log"
 	"os"
 	"runtime"
 )

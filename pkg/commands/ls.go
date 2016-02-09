@@ -3,7 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"errors"
-	"github.com/grafana/grafana-cli/log"
+	"github.com/grafana/grafana-cli/pkg/log"
 	"io/ioutil"
 	"os"
 	"path"

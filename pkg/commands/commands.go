@@ -2,7 +2,7 @@ package commands
 
 import (
 	"github.com/codegangsta/cli"
-	"github.com/grafana/grafana-cli/log"
+	"github.com/grafana/grafana-cli/pkg/log"
 )
 
 type CommandLine interface {
