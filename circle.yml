@@ -1,0 +1,21 @@
+machine:
+  environment:
+    GOPATH: "/home/ubuntu/.go_workspace"
+    ORG_PATH: "github.com/grafana"
+    REPO_PATH: "${ORG_PATH}/grafana-cli"
+
+dependencies:
+  override:
+    - rm -rf ${GOPATH}/src/${REPO_PATH}
+    - mkdir -p ${GOPATH}/src/${ORG_PATH}
+    - ln -s ~/grafana-cli ${GOPATH}/src/${ORG_PATH}
+    - go get github.com/tools/godep
+
+test:
+  override:
+     # FMT
+     - test -z "$(gofmt -s -l . | grep -v Godeps/_workspace/src/ | tee /dev/stderr)"
+     # GO VET
+     - go vet ./pkg/...
+     # Go test
+     - godep go test -v ./pkg/...
