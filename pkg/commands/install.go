@@ -9,30 +9,47 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 )
 
-func installCommand(c CommandLine) error {
+func validateInput(c CommandLine, pluginFolder string) error {
 	arg := c.Args().First()
 	if arg == "" {
 		return errors.New("please specify plugin to install")
 	}
 
-	plugin, err := getPlugin(arg)
+	pluginDir := c.GlobalString("path")
+	if pluginDir == "" {
+		return errors.New("missing path flag")
+	}
 
+	fileinfo, err := os.Stat(pluginDir)
+	if err != nil && !fileinfo.IsDir() {
+		return errors.New("path is not a directory")
+	}
+
+	return nil
+}
+
+func installCommand(c CommandLine) error {
+	pluginFolder := c.GlobalString("path")
+	if err := validateInput(c, pluginFolder); err != nil {
+		return err
+	}
+
+	plugin, err := getPlugin(c.Args().First())
 	if err != nil {
 		return err
 	}
 
+	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
+
 	log.Infof("installing %v\n", plugin.Id)
 	log.Infof("from url: %v\n", plugin.Url)
 	log.Infof("on commit: %v\n", plugin.Commit)
+	log.Infof("into: %v\n", pluginFolder)
 
-	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
-
-	pluginDir := c.GlobalString("path")
-	err = downloadFile(pluginDir, downloadUrl)
-
-	return err
+	return downloadFile(pluginFolder, downloadUrl)
 }
 
 func downloadFile(filepath string, url string) (err error) {
@@ -52,11 +69,19 @@ func downloadFile(filepath string, url string) (err error) {
 		log.Errorf("%v", err)
 	}
 	for _, zf := range r.File {
-		path := filepath + zf.Name
+		log.Infof("filepath: %s\n", filepath)
+		log.Infof("zf.Name: %s\n", zf.Name)
+
+		newfile := path.Join(filepath, zf.Name)
+
+		// TODO: decide how to handle the plugin folder naming
+		// Depends on how we package plugins.
+		// 2016-02-09 bergquist
+
 		if zf.FileInfo().IsDir() {
-			os.Mkdir(path, 0777)
+			os.Mkdir(newfile, 0777)
 		} else {
-			dst, err := os.Create(path)
+			dst, err := os.Create(newfile)
 			if err != nil {
 				log.Errorf("%v", err)
 			}
