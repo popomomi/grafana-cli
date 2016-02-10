@@ -1,14 +1,23 @@
 package commands
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/franela/goreq"
+	"io/ioutil"
+	"path"
 )
 
 type InstalledPlugin struct {
-	Id      string `json:"id"`
-	Name    string `json:"name"`
+	Id   string `json:"id"`
+	Name string `json:"name"`
+
+	Info PluginInfo `json:"info"`
+}
+
+type PluginInfo struct {
 	Version string `json:"version"`
+	Updated string `json:"updated"`
 }
 
 type Plugin struct {
@@ -34,6 +43,30 @@ func listAllPlugins() (PluginRepo, error) {
 	}
 
 	return resp, nil
+}
+
+func getLocalPlugins(pluginDir string) []InstalledPlugin {
+	result := make([]InstalledPlugin, 0)
+
+	files, _ := ioutil.ReadDir(pluginDir)
+	for _, f := range files {
+		pluginData, _ := ioutil.ReadFile(path.Join(pluginDir, f.Name(), "plugin.json"))
+
+		res := InstalledPlugin{}
+		json.Unmarshal(pluginData, &res)
+
+		if res.Info.Version == "" {
+			res.Info.Version = "0.0.0"
+		}
+
+		if res.Id == "" {
+			res.Id = res.Name
+		}
+
+		result = append(result, res)
+	}
+
+	return result
 }
 
 func getPlugin(id string) (Plugin, error) {

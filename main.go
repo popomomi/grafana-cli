@@ -5,6 +5,7 @@ import (
 	"github.com/codegangsta/cli"
 	"github.com/grafana/grafana-cli/pkg/commands"
 	"github.com/grafana/grafana-cli/pkg/log"
+	"github.com/grafana/grafana-cli/pkg/version"
 	"os"
 	"runtime"
 )
@@ -27,7 +28,7 @@ func main() {
 	app.Name = "Grafana cli"
 	app.Author = "raintank"
 	app.Email = "https://github.com/grafana/grafana"
-	app.Version = "0.0.1"
+	app.Version = version.Version
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:  "path",

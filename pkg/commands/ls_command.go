@@ -1,12 +1,10 @@
 package commands
 
 import (
-	"encoding/json"
 	"errors"
 	"github.com/grafana/grafana-cli/pkg/log"
-	"io/ioutil"
+
 	"os"
-	"path"
 )
 
 func validateCommand(pluginDir string) error {
@@ -36,15 +34,10 @@ func lsCommand(c CommandLine) error {
 		return err
 	}
 
-	files, _ := ioutil.ReadDir(pluginDir)
-	for _, f := range files {
+	plugins := getLocalPlugins(pluginDir)
 
-		pluginData, _ := ioutil.ReadFile(path.Join(pluginDir, f.Name(), "plugin.json"))
-
-		res := InstalledPlugin{}
-		json.Unmarshal(pluginData, &res)
-
-		log.Infof("plugin: %s @%s \n", res.Name, res.Version)
+	for _, plugin := range plugins {
+		log.Infof("plugin: %s @ %s \n", plugin.Name, plugin.Info.Version)
 	}
 
 	return nil

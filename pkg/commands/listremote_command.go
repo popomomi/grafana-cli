@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"fmt"
+	"github.com/grafana/grafana-cli/pkg/log"
 )
 
 func listremoteCommand(c CommandLine) error {
@@ -12,7 +12,7 @@ func listremoteCommand(c CommandLine) error {
 	}
 
 	for _, i := range plugin.Plugins {
-		fmt.Printf("id: %v version:%v\n", i.Id, i.Version)
+		log.Infof("id: %v version:%v\n", i.Id, i.Version)
 	}
 
 	return nil
