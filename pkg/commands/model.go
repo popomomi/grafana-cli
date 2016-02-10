@@ -25,7 +25,7 @@ type PluginRepo struct {
 }
 
 func listAllPlugins() (PluginRepo, error) {
-	res, _ := goreq.Request{Uri: "https://raw.githubusercontent.com/grafana/grafana-cli/master/test-data/mock-repo.json"}.Do()
+	res, _ := goreq.Request{Uri: "https://raw.githubusercontent.com/grafana/grafana-plugin-repository/master/repo.json"}.Do()
 
 	var resp PluginRepo
 	err := res.Body.FromJsonTo(&resp)

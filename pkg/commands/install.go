@@ -45,7 +45,7 @@ func installCommand(c CommandLine) error {
 	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
 
 	log.Infof("installing %v\n", plugin.Id)
-	log.Infof("from url: %v\n", plugin.Url)
+	log.Infof("from url: %v\n", downloadUrl)
 	log.Infof("on commit: %v\n", plugin.Commit)
 	log.Infof("into: %v\n", pluginFolder)
 
