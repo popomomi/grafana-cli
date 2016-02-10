@@ -9,8 +9,8 @@ import (
 	"path"
 )
 
-func lsCommand(c CommandLine) error {
-	pluginDir := c.GlobalString("path")
+func validateCommand(pluginDir string) error {
+
 	if pluginDir == "" {
 		return errors.New("missing path flag")
 	}
@@ -26,7 +26,17 @@ func lsCommand(c CommandLine) error {
 		return errors.New("plugin path is not a directory")
 	}
 
-	files, err := ioutil.ReadDir(pluginDir)
+	return nil
+
+}
+
+func lsCommand(c CommandLine) error {
+	pluginDir := c.GlobalString("path")
+	if err := validateCommand(pluginDir); err != nil {
+		return err
+	}
+
+	files, _ := ioutil.ReadDir(pluginDir)
 	for _, f := range files {
 
 		pluginData, _ := ioutil.ReadFile(path.Join(pluginDir, f.Name(), "plugin.json"))
