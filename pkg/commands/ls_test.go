@@ -7,7 +7,7 @@ import (
 	. "github.com/smartystreets/goconvey/convey"
 )
 
-func TestVoid(t *testing.T) {
+func TestMissingPath(t *testing.T) {
 	Convey("Missing path", t, func() {
 		commandLine := &commandstest.FakeCommandLine{
 			CliArgs: []string{"ls"},
