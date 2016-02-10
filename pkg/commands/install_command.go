@@ -53,7 +53,7 @@ func installCommand(c CommandLine) error {
 	return downloadFile(plugin.Id, pluginFolder, downloadUrl)
 }
 
-func FormatFilename(pluginname, filename string) string {
+func RemoveGitBuildFromname(pluginname, filename string) string {
 	r := regexp.MustCompile(pluginname + "-[a-zA-Z0-9_.-]*\\/")
 	res := r.ReplaceAllString(filename, pluginname+"/")
 	return res
@@ -76,7 +76,7 @@ func downloadFile(pluginName, filepath, url string) (err error) {
 		log.Errorf("%v", err)
 	}
 	for _, zf := range r.File {
-		newfile := path.Join(filepath, FormatFilename(pluginName, zf.Name))
+		newfile := path.Join(filepath, RemoveGitBuildFromname(pluginName, zf.Name))
 
 		if zf.FileInfo().IsDir() {
 			os.Mkdir(newfile, 0777)

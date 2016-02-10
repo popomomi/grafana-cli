@@ -17,7 +17,7 @@ func TestFoldernameReplacement(t *testing.T) {
 
 		Convey("should be replaced with plugin name", func() {
 			for k, v := range paths {
-				So(FormatFilename("datasource-plugin-kairosdb", k), ShouldEqual, v)
+				So(RemoveGitBuildFromname("datasource-plugin-kairosdb", k), ShouldEqual, v)
 			}
 		})
 	})
