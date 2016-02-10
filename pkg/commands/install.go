@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"regexp"
 )
 
 func validateInput(c CommandLine, pluginFolder string) error {
@@ -49,10 +50,16 @@ func installCommand(c CommandLine) error {
 	log.Infof("on commit: %v\n", plugin.Commit)
 	log.Infof("into: %v\n", pluginFolder)
 
-	return downloadFile(pluginFolder, downloadUrl)
+	return downloadFile(plugin.Id, pluginFolder, downloadUrl)
 }
 
-func downloadFile(filepath string, url string) (err error) {
+func FormatFilename(pluginname, filename string) string {
+	r := regexp.MustCompile(pluginname + "-[a-zA-Z0-9_.-]*\\/")
+	res := r.ReplaceAllString(filename, pluginname+"/")
+	return res
+}
+
+func downloadFile(pluginName, filepath, url string) (err error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		return err
@@ -69,14 +76,7 @@ func downloadFile(filepath string, url string) (err error) {
 		log.Errorf("%v", err)
 	}
 	for _, zf := range r.File {
-		log.Infof("filepath: %s\n", filepath)
-		log.Infof("zf.Name: %s\n", zf.Name)
-
-		newfile := path.Join(filepath, zf.Name)
-
-		// TODO: decide how to handle the plugin folder naming
-		// Depends on how we package plugins.
-		// 2016-02-09 bergquist
+		newfile := path.Join(filepath, FormatFilename(pluginName, zf.Name))
 
 		if zf.FileInfo().IsDir() {
 			os.Mkdir(newfile, 0777)
