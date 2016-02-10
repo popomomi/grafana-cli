@@ -1,9 +1,6 @@
 {
 	"ImportPath": "github.com/grafana/grafana-cli",
 	"GoVersion": "go1.5",
-	"Packages": [
-		"./pkg/..."
-	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/codegangsta/cli",
@@ -15,13 +12,8 @@
 			"Rev": "3ddeded65be21dacb5a2e2d0b95af9ff6862a2b5"
 		},
 		{
-			"ImportPath": "github.com/jtolds/gls",
-			"Rev": "f1ac7f4f24f50328e6bc838ca4437d1612a0243c"
-		},
-		{
-			"ImportPath": "github.com/smartystreets/goconvey/convey",
-			"Comment": "1.5.0-356-gfbc0a1c",
-			"Rev": "fbc0a1c888f9f96263f9a559d1769905245f1123"
+			"ImportPath": "github.com/hashicorp/go-version",
+			"Rev": "7e3c02b30806fa5779d3bdfc152ce4c6f40e7b38"
 		}
 	]
 }

@@ -11,6 +11,7 @@ import (
 type InstalledPlugin struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
+	Type string `json:"type"`
 
 	Info PluginInfo `json:"info"`
 }
