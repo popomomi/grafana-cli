@@ -10,6 +10,7 @@ dependencies:
     - mkdir -p ${GOPATH}/src/${ORG_PATH}
     - ln -s ~/grafana-cli ${GOPATH}/src/${ORG_PATH}
     - go get github.com/tools/godep
+    - godep restore
 
 test:
   override:
@@ -19,5 +20,5 @@ test:
      - go vet ./pkg/...
      # Go test
      - godep go test -v ./pkg/...
-
+     # Go build
      - go build
