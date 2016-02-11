@@ -55,7 +55,7 @@ func installCommand(c CommandLine) error {
 }
 
 func RemoveGitBuildFromname(pluginname, filename string) string {
-	r := regexp.MustCompile(pluginname + "-[a-zA-Z0-9_.-]*\\/")
+	r := regexp.MustCompile("^[a-zA-Z0-9_.-]*/")
 	res := r.ReplaceAllString(filename, pluginname+"/")
 	return res
 }
