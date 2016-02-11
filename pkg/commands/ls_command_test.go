@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/grafana/grafana-cli/pkg/commands/commandstest"
+	s "github.com/grafana/grafana-cli/pkg/services"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -17,9 +18,10 @@ func TestMissingPath(t *testing.T) {
 				},
 			},
 		}
+		s.IoHelper = &commandstest.FakeIoUtil{}
 
 		Convey("should return error", func() {
-			err := lsCommand(commandLine, &IoUtilImp{})
+			err := lsCommand(commandLine)
 			So(err, ShouldNotBeNil)
 		})
 	})
@@ -33,11 +35,12 @@ func TestMissingPath(t *testing.T) {
 				},
 			},
 		}
-
-		util := &commandstest.FakeIoUtil{}
+		GetStat = &commandstest.FakeIoUtil{
+			FakeIsDirectory: false,
+		}
 
 		Convey("should return error", func() {
-			err := lsCommand(commandLine, util)
+			err := lsCommand(commandLine)
 			So(err, ShouldNotBeNil)
 		})
 	})

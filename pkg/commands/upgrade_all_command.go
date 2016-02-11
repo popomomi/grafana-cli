@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/grafana/grafana-cli/pkg/log"
+	m "github.com/grafana/grafana-cli/pkg/models"
 	services "github.com/grafana/grafana-cli/pkg/services"
 	"github.com/hashicorp/go-version"
 )
@@ -28,7 +29,7 @@ func upgradeAllCommand(c CommandLine) error {
 		return err
 	}
 
-	pluginsToUpgrade := make([]services.InstalledPlugin, 0)
+	pluginsToUpgrade := make([]m.InstalledPlugin, 0)
 
 	for _, localPlugin := range localPlugins {
 		for _, remotePlugin := range remotePlugins.Plugins {

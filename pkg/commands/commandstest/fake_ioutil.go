@@ -6,6 +6,24 @@ import (
 )
 
 type FakeIoUtil struct {
+	FakeReadDir     []os.FileInfo
+	FakeIsDirectory bool
+}
+
+func (util *FakeIoUtil) Stat(path string) (os.FileInfo, error) {
+	return FakeFileInfo{IsDirectory: util.FakeIsDirectory}, nil
+}
+
+func (util *FakeIoUtil) RemoveAll(path string) error {
+	return nil
+}
+
+func (util *FakeIoUtil) ReadDir(path string) ([]os.FileInfo, error) {
+	return util.FakeReadDir, nil
+}
+
+func (i *FakeIoUtil) ReadFile(filename string) ([]byte, error) {
+	return make([]byte, 0), nil
 }
 
 type FakeFileInfo struct {
@@ -34,8 +52,4 @@ func (ffi FakeFileInfo) ModTime() time.Time {
 
 func (ffi FakeFileInfo) Sys() interface{} {
 	return nil
-}
-
-func (util *FakeIoUtil) Stat(path string) (os.FileInfo, error) {
-	return FakeFileInfo{IsDirectory: false}, nil
 }
