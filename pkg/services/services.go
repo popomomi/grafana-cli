@@ -46,6 +46,10 @@ func GetLocalPlugins(pluginDir string) []m.InstalledPlugin {
 	return result
 }
 
+func InstallPlugin(pluginDir, pluginId string) error {
+	return nil
+}
+
 func RemoveInstalledPlugin(pluginPath, id string) error {
 	return IoHelper.RemoveAll(path.Join(pluginPath, id))
 }

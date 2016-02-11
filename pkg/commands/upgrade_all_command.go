@@ -44,10 +44,9 @@ func upgradeAllCommand(c CommandLine) error {
 	for _, p := range pluginsToUpgrade {
 		log.Infof("lets upgrade %v \n", p)
 
-		//remote local plugin p
-		//install plugin p
+		services.RemoveInstalledPlugin(pluginDir, p.Id)
+		InstallPlugin(p.Id, pluginDir)
 	}
-	// download new plugins
 
 	return nil
 }

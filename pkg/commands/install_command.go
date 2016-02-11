@@ -39,7 +39,13 @@ func installCommand(c CommandLine) error {
 		return err
 	}
 
-	plugin, err := services.GetPlugin(c.Args().First())
+	pluginToInstall := c.Args().First()
+
+	return InstallPlugin(pluginToInstall, pluginFolder)
+}
+
+func InstallPlugin(pluginName, pluginFolder string) error {
+	plugin, err := services.GetPlugin(pluginName)
 	if err != nil {
 		return err
 	}
