@@ -2,10 +2,11 @@ package commands
 
 import (
 	"github.com/grafana/grafana-cli/pkg/log"
+	"github.com/grafana/grafana-cli/pkg/services"
 )
 
 func listremoteCommand(c CommandLine) error {
-	plugin, err := listAllPlugins()
+	plugin, err := services.ListAllPlugins()
 
 	if err != nil {
 		return err

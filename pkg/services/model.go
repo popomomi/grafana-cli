@@ -1,4 +1,4 @@
-package commands
+package services
 
 import (
 	"encoding/json"
@@ -34,7 +34,7 @@ type PluginRepo struct {
 	Version string   `json:"version"`
 }
 
-func listAllPlugins() (PluginRepo, error) {
+func ListAllPlugins() (PluginRepo, error) {
 	res, _ := goreq.Request{Uri: "https://raw.githubusercontent.com/grafana/grafana-plugin-repository/master/repo.json"}.Do()
 
 	var resp PluginRepo
@@ -46,7 +46,7 @@ func listAllPlugins() (PluginRepo, error) {
 	return resp, nil
 }
 
-func getLocalPlugins(pluginDir string) []InstalledPlugin {
+func GetLocalPlugins(pluginDir string) []InstalledPlugin {
 	result := make([]InstalledPlugin, 0)
 
 	files, _ := ioutil.ReadDir(pluginDir)
@@ -70,8 +70,8 @@ func getLocalPlugins(pluginDir string) []InstalledPlugin {
 	return result
 }
 
-func getPlugin(id string) (Plugin, error) {
-	resp, err := listAllPlugins()
+func GetPlugin(id string) (Plugin, error) {
+	resp, err := ListAllPlugins()
 	if err != nil {
 	}
 

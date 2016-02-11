@@ -19,7 +19,25 @@ func TestMissingPath(t *testing.T) {
 		}
 
 		Convey("should return error", func() {
-			err := lsCommand(commandLine)
+			err := lsCommand(commandLine, &IoUtilImp{})
+			So(err, ShouldNotBeNil)
+		})
+	})
+
+	Convey("Path is not a directory", t, func() {
+		commandLine := &commandstest.FakeCommandLine{
+			CliArgs: []string{"ls"},
+			GlobalFlags: &commandstest.FakeFlagger{
+				Data: map[string]interface{}{
+					"path": "/var/lib/grafana/plugins",
+				},
+			},
+		}
+
+		util := &commandstest.FakeIoUtil{}
+
+		Convey("should return error", func() {
+			err := lsCommand(commandLine, util)
 			So(err, ShouldNotBeNil)
 		})
 	})

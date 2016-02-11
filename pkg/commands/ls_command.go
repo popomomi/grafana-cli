@@ -3,18 +3,17 @@ package commands
 import (
 	"errors"
 	"github.com/grafana/grafana-cli/pkg/log"
-
-	"os"
+	services "github.com/grafana/grafana-cli/pkg/services"
 )
 
-func validateCommand(pluginDir string) error {
+func validateCommand(pluginDir string, ioutil IoUtil) error {
 
 	if pluginDir == "" {
 		return errors.New("missing path flag")
 	}
 
 	log.Debug("plugindir: " + pluginDir + "\n")
-	pluginDirInfo, err := os.Stat(pluginDir)
+	pluginDirInfo, err := ioutil.Stat(pluginDir)
 
 	if err != nil {
 		return errors.New("missing path flag")
@@ -28,13 +27,13 @@ func validateCommand(pluginDir string) error {
 
 }
 
-func lsCommand(c CommandLine) error {
+func lsCommand(c CommandLine, ioutil IoUtil) error {
 	pluginDir := c.GlobalString("path")
-	if err := validateCommand(pluginDir); err != nil {
+	if err := validateCommand(pluginDir, ioutil); err != nil {
 		return err
 	}
 
-	plugins := getLocalPlugins(pluginDir)
+	plugins := services.GetLocalPlugins(pluginDir)
 
 	for _, plugin := range plugins {
 		log.Infof("plugin: %s @ %s \n", plugin.Name, plugin.Info.Version)

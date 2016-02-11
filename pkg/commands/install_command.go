@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/grafana/grafana-cli/pkg/log"
+	services "github.com/grafana/grafana-cli/pkg/services"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -38,7 +39,7 @@ func installCommand(c CommandLine) error {
 		return err
 	}
 
-	plugin, err := getPlugin(c.Args().First())
+	plugin, err := services.GetPlugin(c.Args().First())
 	if err != nil {
 		return err
 	}

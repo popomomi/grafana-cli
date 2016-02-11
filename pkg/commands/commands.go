@@ -3,6 +3,7 @@ package commands
 import (
 	"github.com/codegangsta/cli"
 	"github.com/grafana/grafana-cli/pkg/log"
+	"os"
 )
 
 type CommandLine interface {
@@ -33,6 +34,29 @@ func (c *contextCommandLine) ShowVersion() {
 
 func (c *contextCommandLine) Application() *cli.App {
 	return c.App
+}
+
+type IoUtil interface {
+	Stat(path string) (os.FileInfo, error)
+}
+
+type IoUtilImp struct {
+}
+
+func (i *IoUtilImp) Stat(path string) (os.FileInfo, error) {
+	return os.Stat(path)
+}
+
+func runCommand2(command func(commandLine CommandLine, ioutil IoUtil) error) func(context *cli.Context) {
+	return func(context *cli.Context) {
+		ioUtil := &IoUtilImp{}
+		cmd := &contextCommandLine{context}
+		if err := command(cmd, ioUtil); err != nil {
+			log.Errorf("%v\n\n", err)
+
+			cmd.ShowHelp()
+		}
+	}
 }
 
 func runCommand(command func(commandLine CommandLine) error) func(context *cli.Context) {
@@ -67,7 +91,7 @@ var Commands = []cli.Command{
 	}, {
 		Name:   "ls",
 		Usage:  "list all installed plugins",
-		Action: runCommand(lsCommand),
+		Action: runCommand2(lsCommand),
 	}, {
 		Name:   "remove",
 		Usage:  "removes stuff",
