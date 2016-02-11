@@ -27,21 +27,24 @@ func upgradeAllCommand(c CommandLine) error {
 		return err
 	}
 
+	pluginsToUpgrade := make([]InstalledPlugin, 0)
+
 	for _, localPlugin := range localPlugins {
 		for _, remotePlugin := range remotePlugins.Plugins {
-			log.Infof("%s ==  %s\n", localPlugin.Id, remotePlugin.Id)
 			if localPlugin.Id == remotePlugin.Id {
-				var upgrade = ShouldUpgrade(localPlugin.Info.Version, remotePlugin.Version)
-				log.Infof("\tShould I upgrade %s from %s to %s? %v \n\n",
-					localPlugin.Name,
-					localPlugin.Info.Version,
-					remotePlugin.Version,
-					upgrade)
-
+				if ShouldUpgrade(localPlugin.Info.Version, remotePlugin.Version) {
+					pluginsToUpgrade = append(pluginsToUpgrade, localPlugin)
+				}
 			}
 		}
 	}
 
+	for _, p := range pluginsToUpgrade {
+		log.Infof("lets upgrade %v \n", p)
+
+		//remote local plugin p
+		//install plugin p
+	}
 	// download new plugins
 
 	return nil
