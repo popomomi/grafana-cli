@@ -13,6 +13,8 @@ func runCommand(command func(commandLine CommandLine) error) func(context *cli.C
 			log.Errorf("%v\n\n", err)
 
 			cmd.ShowHelp()
+		} else {
+			log.Info("Restart grafana after installing plugins . <service grafana-server restart>\n")
 		}
 	}
 }
