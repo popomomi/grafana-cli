@@ -111,12 +111,12 @@ func downloadFile(pluginName, filepath, url string) (err error) {
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Errorf("%v", err)
+		return err
 	}
 
 	r, err := zip.NewReader(bytes.NewReader(body), resp.ContentLength)
 	if err != nil {
-		log.Errorf("%v", err)
+		return err
 	}
 	for _, zf := range r.File {
 		newfile := path.Join(filepath, RemoveGitBuildFromname(pluginName, zf.Name))
