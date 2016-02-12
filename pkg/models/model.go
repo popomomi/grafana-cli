@@ -9,7 +9,13 @@ type InstalledPlugin struct {
 	Name string `json:"name"`
 	Type string `json:"type"`
 
-	Info PluginInfo `json:"info"`
+	Info       PluginInfo `json:"info"`
+	Dependency Dependency `json:"dependencies"`
+}
+
+type Dependency struct {
+	GrafanaVersion string   `json:"grafanaVersion"`
+	Plugins        []Plugin `json:"plugins"`
 }
 
 type PluginInfo struct {

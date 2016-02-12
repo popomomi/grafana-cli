@@ -22,32 +22,33 @@ func ListAllPlugins() (m.PluginRepo, error) {
 	return resp, nil
 }
 
+func ReadPlugin(pluginDir, pluginName string) m.InstalledPlugin {
+	pluginDataPath := path.Join(pluginDir, pluginName, "plugin.json")
+	pluginData, _ := IoHelper.ReadFile(pluginDataPath)
+
+	res := m.InstalledPlugin{}
+	json.Unmarshal(pluginData, &res)
+
+	if res.Info.Version == "" {
+		res.Info.Version = "0.0.0"
+	}
+
+	if res.Id == "" {
+		res.Id = res.Name
+	}
+
+	return res
+}
+
 func GetLocalPlugins(pluginDir string) []m.InstalledPlugin {
 	result := make([]m.InstalledPlugin, 0)
 	files, _ := IoHelper.ReadDir(pluginDir)
 	for _, f := range files {
-		pluginDataPath := path.Join(pluginDir, f.Name(), "plugin.json")
-		pluginData, _ := IoHelper.ReadFile(pluginDataPath)
-
-		res := m.InstalledPlugin{}
-		json.Unmarshal(pluginData, &res)
-
-		if res.Info.Version == "" {
-			res.Info.Version = "0.0.0"
-		}
-
-		if res.Id == "" {
-			res.Id = res.Name
-		}
-
+		res := ReadPlugin(pluginDir, f.Name())
 		result = append(result, res)
 	}
 
 	return result
-}
-
-func InstallPlugin(pluginDir, pluginId string) error {
-	return nil
 }
 
 func RemoveInstalledPlugin(pluginPath, id string) error {

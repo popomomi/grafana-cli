@@ -41,8 +41,7 @@ func installCommand(c CommandLine) error {
 	}
 
 	pluginToInstall := c.Args().First()
-
-	var version = c.Args().Get(1)
+	version := c.Args().Get(1)
 
 	log.Infof("version: %v\n", version)
 
@@ -70,7 +69,18 @@ func InstallPlugin(pluginName, pluginFolder, version string) error {
 	log.Infof("on commit: %v\n", commit)
 	log.Infof("into: %v\n", pluginFolder)
 
-	return downloadFile(plugin.Id, pluginFolder, downloadUrl)
+	err = downloadFile(plugin.Id, pluginFolder, downloadUrl)
+
+	res := services.ReadPlugin(pluginFolder, pluginName)
+
+	for _, v := range res.Dependency.Plugins {
+		log.Infof("Depends on %s install!\n", v.Id)
+
+		//Todo: uncomment this code once the repo is more correct.
+		//InstallPlugin(v.Id, pluginFolder, "")
+	}
+
+	return err
 }
 
 func SelectVersion(plugin m.Plugin, version string) (m.Version, error) {

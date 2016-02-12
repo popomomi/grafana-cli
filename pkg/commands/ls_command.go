@@ -41,13 +41,9 @@ func lsCommand(c CommandLine) error {
 		return err
 	}
 
-	plugins := getPlugins(pluginDir)
-
-	for _, plugin := range plugins {
+	for _, plugin := range getPlugins(pluginDir) {
 		log.Infof("plugin: %s @ %s \n", plugin.Name, plugin.Info.Version)
 	}
-
-	log.Infof("\n\nReturning %v\n\n", plugins)
 
 	return nil
 }
