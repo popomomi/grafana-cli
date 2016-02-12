@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"errors"
 	"github.com/grafana/grafana-cli/pkg/log"
+	m "github.com/grafana/grafana-cli/pkg/models"
 	services "github.com/grafana/grafana-cli/pkg/services"
 	"io"
 	"io/ioutil"
@@ -41,29 +42,54 @@ func installCommand(c CommandLine) error {
 
 	pluginToInstall := c.Args().First()
 
-	return InstallPlugin(pluginToInstall, pluginFolder)
+	var version = c.Args().Get(1)
+
+	log.Infof("version: %v\n", version)
+
+	return InstallPlugin(pluginToInstall, pluginFolder, version)
 }
 
-func InstallPlugin(pluginName, pluginFolder string) error {
+func InstallPlugin(pluginName, pluginFolder, version string) error {
 	plugin, err := services.GetPlugin(pluginName)
 	if err != nil {
 		return err
 	}
 
-	downloadUrl := plugin.Url + "/archive/" + plugin.Commit + ".zip"
+	v, err := SelectVersion(plugin, version)
+	if err != nil {
+		return err
+	}
 
-	log.Infof("installing %v\n", plugin.Id)
+	url := v.Url
+	commit := v.Commit
+
+	downloadUrl := url + "/archive/" + commit + ".zip"
+
+	log.Infof("installing %v @ %v\n", plugin.Id, version)
 	log.Infof("from url: %v\n", downloadUrl)
-	log.Infof("on commit: %v\n", plugin.Commit)
+	log.Infof("on commit: %v\n", commit)
 	log.Infof("into: %v\n", pluginFolder)
 
 	return downloadFile(plugin.Id, pluginFolder, downloadUrl)
 }
 
+func SelectVersion(plugin m.Plugin, version string) (m.Version, error) {
+	if version == "" {
+		return plugin.Versions[0], nil
+	}
+
+	for _, v := range plugin.Versions {
+		if v.Version == version {
+			return v, nil
+		}
+	}
+
+	return m.Version{}, errors.New("Could not find the version your looking for")
+}
+
 func RemoveGitBuildFromname(pluginname, filename string) string {
 	r := regexp.MustCompile("^[a-zA-Z0-9_.-]*/")
-	res := r.ReplaceAllString(filename, pluginname+"/")
-	return res
+	return r.ReplaceAllString(filename, pluginname+"/")
 }
 
 func downloadFile(pluginName, filepath, url string) (err error) {

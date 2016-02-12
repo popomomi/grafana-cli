@@ -18,11 +18,15 @@ type PluginInfo struct {
 }
 
 type Plugin struct {
-	Id       string `json:"id"`
-	Category string `json:"category"`
-	Commit   string `json:"commit"`
-	Url      string `json:"url"`
-	Version  string `json:"version"`
+	Id       string    `json:"id"`
+	Category string    `json:"category"`
+	Versions []Version `json:"versions"`
+}
+
+type Version struct {
+	Commit  string `json:"commit"`
+	Url     string `json:"url"`
+	Version string `json:"version"`
 }
 
 type PluginRepo struct {
