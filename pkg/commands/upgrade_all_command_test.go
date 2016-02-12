@@ -15,8 +15,8 @@ func TestVersionComparsion(t *testing.T) {
 		}
 
 		shouldUpgrade := map[string]m.Plugin{
-			"0.0.0": m.Plugin{Versions: versions},
-			"1.0.0": m.Plugin{Versions: versions},
+			"0.0.0": {Versions: versions},
+			"1.0.0": {Versions: versions},
 		}
 
 		Convey("should return error", func() {
@@ -33,8 +33,8 @@ func TestVersionComparsion(t *testing.T) {
 		}
 
 		shouldNotUpgrade := map[string]m.Plugin{
-			"2.0.0": m.Plugin{Versions: versions},
-			"6.0.0": m.Plugin{Versions: versions},
+			"2.0.0": {Versions: versions},
+			"6.0.0": {Versions: versions},
 		}
 
 		Convey("should return error", func() {
