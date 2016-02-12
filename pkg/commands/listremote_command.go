@@ -13,7 +13,7 @@ func listremoteCommand(c CommandLine) error {
 	}
 
 	for _, i := range plugin.Plugins {
-		log.Infof("id: %v version:%v\n", i.Id, i.Version)
+		log.Infof("id: %v version:\n", i.Id)
 	}
 
 	return nil

@@ -3,15 +3,20 @@ package commands
 import (
 	"testing"
 
+	m "github.com/grafana/grafana-cli/pkg/models"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestVersionComparsion(t *testing.T) {
 	Convey("Validate that version is outdated", t, func() {
-		shouldUpgrade := map[string]string{
-			"0.0.0": "1.0.0",
-			"1.0.0": "1.0.1",
-			"1.1.0": "1.1.1",
+		versions := []m.Version{
+			{Version: "1.1.1"},
+			{Version: "2.0.0"},
+		}
+
+		shouldUpgrade := map[string]m.Plugin{
+			"0.0.0": m.Plugin{Versions: versions},
+			"1.0.0": m.Plugin{Versions: versions},
 		}
 
 		Convey("should return error", func() {
@@ -22,11 +27,14 @@ func TestVersionComparsion(t *testing.T) {
 	})
 
 	Convey("Validate that version is ok", t, func() {
-		shouldNotUpgrade := map[string]string{
-			"2.0.0": "1.91.91",
-			"3.0.0": "3.0.0",
-			"2.1.1": "2.0.91",
-			"x":     "1.0.0",
+		versions := []m.Version{
+			{Version: "1.1.1"},
+			{Version: "2.0.0"},
+		}
+
+		shouldNotUpgrade := map[string]m.Plugin{
+			"2.0.0": m.Plugin{Versions: versions},
+			"6.0.0": m.Plugin{Versions: versions},
 		}
 
 		Convey("should return error", func() {

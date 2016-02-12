@@ -7,15 +7,24 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
-func ShouldUpgrade(installed, remote string) bool {
+func ShouldUpgrade(installed string, remote m.Plugin) bool {
 	installedVersion, err1 := version.NewVersion(installed)
-	remoteVersion, err2 := version.NewVersion(remote)
 
-	if err1 != nil || err2 != nil {
+	if err1 != nil {
 		return false
 	}
 
-	return installedVersion.LessThan(remoteVersion)
+	for _, v := range remote.Versions {
+		remoteVersion, err2 := version.NewVersion(v.Version)
+
+		if err2 == nil {
+			if installedVersion.LessThan(remoteVersion) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 func upgradeAllCommand(c CommandLine) error {
@@ -34,7 +43,7 @@ func upgradeAllCommand(c CommandLine) error {
 	for _, localPlugin := range localPlugins {
 		for _, remotePlugin := range remotePlugins.Plugins {
 			if localPlugin.Id == remotePlugin.Id {
-				if ShouldUpgrade(localPlugin.Info.Version, remotePlugin.Version) {
+				if ShouldUpgrade(localPlugin.Info.Version, remotePlugin) {
 					pluginsToUpgrade = append(pluginsToUpgrade, localPlugin)
 				}
 			}
