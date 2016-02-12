@@ -62,14 +62,17 @@ func InstallPlugin(pluginName, pluginFolder, version string) error {
 	url := v.Url
 	commit := v.Commit
 
-	downloadUrl := url + "/archive/" + commit + ".zip"
+	downloadURL := url + "/archive/" + commit + ".zip"
 
 	log.Infof("installing %v @ %v\n", plugin.Id, version)
-	log.Infof("from url: %v\n", downloadUrl)
+	log.Infof("from url: %v\n", downloadURL)
 	log.Infof("on commit: %v\n", commit)
 	log.Infof("into: %v\n", pluginFolder)
 
-	err = downloadFile(plugin.Id, pluginFolder, downloadUrl)
+	err = downloadFile(plugin.Id, pluginFolder, downloadURL)
+	if err == nil {
+		log.Info("Installed %s successfully ✔\n", plugin.Id)
+	}
 
 	res := services.ReadPlugin(pluginFolder, pluginName)
 

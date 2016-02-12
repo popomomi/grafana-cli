@@ -8,6 +8,7 @@ import (
 )
 
 var getPlugins func(path string) []m.InstalledPlugin
+
 var GetStat m.IoUtil
 
 func init() {
@@ -16,11 +17,10 @@ func init() {
 }
 
 func validateCommand(pluginDir string) error {
-
 	if pluginDir == "" {
 		return errors.New("missing path flag")
 	}
-
+    
 	log.Info("plugindir: " + pluginDir + "\n")
 	pluginDirInfo, err := GetStat.Stat(pluginDir)
 
